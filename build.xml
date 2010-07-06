@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="ant" name="challenge">
+	<property name="common.ant.dir" location="." />
+	<property name="common.ant.home.dir" location="${common.ant.dir}" />
+
+	<!-- General settings/defaults -->
+	<property name="jvm.source.version" value="1.6" />
+	<property name="jvm.target.version" value="${jvm.source.version}" />
+	<property name="version.major" value="1" />
+	<property name="version.minor" value="0" />
+	<property name="version.patch" value="0" />
+	<property name="version.separator" value="." />
+	<property name="version" value="${version.major}${version.separator}${version.minor}${version.separator}${version.patch}" />
+	<property name="vendor.name" value="Quora Challenge" />
+
+	<basename property="release.name" file="${ant.project.name}" />
+	<property name="build.version" value="${version}" />
+
+	<property name="build.rdir" value="build" />
+	<property name="dist.rdir" value="dist" />
+	<property name="jar.rdir" value="jar" />
+	<property name="source.rdir" value="src" />
+	<property name="source.java.rdir" value="${source.rdir}${file.separator}java" />
+	<property name="libraries.rdir" value="lib" />
+	<property name="libraries.java.rdir" value="${libraries.rdir}${file.separator}java" />
+	<property name="javadoc.rdir" value="javadoc" />
+	<property name="resources.rdir" value="resources" />
+	<property name="reports.rdir" value="reports" />
+	<property name="input.rdir" value="input" />
+	<property name="test.rdir" value="test" />
+	<property name="test.java.rdir" value="${test.rdir}${file.separator}java" />
+	<property name="test.fixtures.rdir" value="${test.rdir}${file.separator}fixtures" />
+
+	<property name="common.ant.tasks.dir" location="${common.ant.home.dir}${file.separator}tasks" />
+
+	<property name="resources.dir" location="${basedir}${file.separator}${resources.rdir}" />
+	<property name="input.dir" location="${resources.dir}${file.separator}${input.rdir}" />
+	
+	<property name="target.dir" location="${basedir}" />
+	<property name="build.dir" location="${target.dir}${file.separator}${build.rdir}" />
+	<property name="build.compile.dir" location="${build.dir}${file.separator}${source.rdir}" />
+	<property name="build.libraries.dir" location="${build.dir}${file.separator}${libraries.rdir}" />
+	<property name="build.dist.dir" location="${build.dir}${file.separator}${dist.rdir}" />
+	<property name="build.dist.jar.dir" location="${build.dist.dir}${file.separator}${jar.rdir}" />
+	<property name="build.javadoc.dir" location="${build.dir}${file.separator}${javadoc.rdir}" />
+	<property name="build.reports.dir" location="${build.dir}${file.separator}${reports.rdir}" />
+	<property name="test.dir" location="${target.dir}${file.separator}${test.rdir}" />
+	<property name="test.fixtures.dir" location="${build.dir}${file.separator}${test.rdir}${file.separator}${fixtuers.rdir}" />
+	<property name="test.compile.dir" location="${build.dir}${file.separator}${test.rdir}" />
+	<property name="test.libraries.dir" value="${test.dir}${file.separator}${libraries.rdir}" />
+
+	<property name="build.jarfile" value="${build.dist.jar.dir}${file.separator}${release.name}-${build.version}.jar" />
+
+	<!-- Generic patternsets -->
+	<patternset id="pattern.java-files">
+		<include name="**${file.separator}*.java" />
+	</patternset>
+	<patternset id="pattern.non-java-files">
+		<exclude name="**${file.separator}*.java" />
+	</patternset>
+	<patternset id="pattern.jar-files">
+		<include name="**${file.separator}*.jar" />
+	</patternset>
+
+	<path id="compile.dependencies.classpath">
+		<fileset dir="./lib">
+			<patternset refid="pattern.jar-files" />
+		</fileset>
+	</path>
+	<path id="test.dependencies.classpath">
+		<fileset dir="./lib">
+			<patternset refid="pattern.jar-files" />
+		</fileset>
+	</path>
+	<path id="build.classpath">
+		<pathelement path="${build.compile.dir}" />
+		<path refid="compile.dependencies.classpath" />
+	</path>
+	<path id="test.classpath">
+		<pathelement path="${build.compile.dir}" />
+		<path refid="test.dependencies.classpath" />
+	</path>
+
+	<condition property="java-check.version-ok" value="true">
+		<equals arg1="${jvm.source.version}" arg2="${ant.java.version}" />
+	</condition>
+
+	<import file="${common.ant.tasks.dir}${file.separator}testng.xml" />
+
+	<!-- Generic/reusable targets -->
+	<target name="java-check" unless="java-check.version-ok">
+		<echo message="Current JDK is ${java.home}." level="info" />
+		<echo message="Java source requires JDK ${jvm.source.version}, but found ${ant.java.version}." level="error" />
+		<echo message="Do you need to override JAVA_HOME?" level="error" />
+		<fail message="Mismatched JDK version used for Ant execution; expected ${jvm.source.version}." />
+	</target>
+
+	<target name="init" depends="java-check" unless="init.already-run">
+		<echo message="Initializing project: ${ant.project.name} (${release.name})" level="info" />
+		<mkdir dir="${build.dir}" />
+		<condition property="build.version" value="${version}${version.separator}" else="${version}${version.separator}${user.name}">
+			<istrue value="${release}" />
+		</condition>
+		<echo message="Working directory: ${basedir}" level="info" />
+		<echo message="Build directory: ${build.dir}" level="info" />
+		<echo message="Build version: ${build.version}" level="info" />
+		<property name="init.already-run" value="true" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="compile">
+		<echo message="Compiling source files in ${basedir}${file.separator}${source.java.rdir}" level="info" />
+		<mkdir dir="${build.compile.dir}" />
+		<copy todir="${build.compile.dir}">
+			<fileset dir="${basedir}${file.separator}${source.java.rdir}">
+				<patternset refid="pattern.non-java-files" />
+			</fileset>
+		</copy>
+		<javac optimize="yes" debug="${build.debug}" destdir="${build.compile.dir}" source="${jvm.source.version}" target="${jvm.target.version}" includeAntRuntime="no">
+			<src path="${basedir}${file.separator}${source.java.rdir}" />
+			<classpath>
+				<path refid="build.classpath" />
+			</classpath>
+			<patternset refid="pattern.java-files" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${build.dist.jar.dir}" />
+		<jar jarfile="${build.jarfile}" compress="true">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Specification-Title" value="${release.name}" />
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Vendor" value="${vendor.name}" />
+				<attribute name="Implementation-Title" value="${release.name}" />
+				<attribute name="Implementation-Version" value="${build.version}${version.separator}" />
+				<attribute name="Implementation-Vendor" value="${vendor.name}" />
+			</manifest>
+			<fileset dir="${build.compile.dir}" />
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java fork="true" classname="com.quora.challenge.command.DuctPathCounter">
+			<assertions>
+				<enable />
+			</assertions>
+			<classpath>
+				<path refid="build.classpath" />
+				<pathelement location="${build.jarfile}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="run-default" depends="jar">
+		<java input="${input.dir}/quora-grid" fork="true" classname="com.quora.challenge.command.DuctPathCounter">
+			<assertions>
+				<enable />
+			</assertions>
+			<classpath>
+				<path refid="build.classpath" />
+				<pathelement location="${build.jarfile}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="${build.javadoc.dir}" />
+		<javadoc destdir="${build.javadoc.dir}" source="${jvm.source.version}" author="true" version="true" use="true" windowtitle="${release.name} v${build.version}">
+			<packageset dir="${basedir}${file.separator}${source.java.rdir}" defaultexcludes="yes" />
+			<classpath>
+				<path refid="build.classpath" />
+			</classpath>
+		</javadoc>
+	</target>
+
+	<target name="test" depends="testng" />
+</project>

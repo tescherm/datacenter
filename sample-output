@@ -1,0 +1,88 @@
+Buildfile: build.xml
+
+clean:
+   [delete] Deleting directory C:\Users\Matt\Desktop\challenge\challenge\build
+
+compile:
+     [echo] Compiling source files in C:\Users\Matt\Desktop\challenge\challenge\src\java
+    [mkdir] Created dir: C:\Users\Matt\Desktop\challenge\challenge\build\src
+     [copy] Copied 8 empty directories to 5 empty directories under C:\Users\Matt\Desktop\challenge\challenge\build\src
+    [javac] Compiling 15 source files to C:\Users\Matt\Desktop\challenge\challenge\build\src
+
+jar:
+    [mkdir] Created dir: C:\Users\Matt\Desktop\challenge\challenge\build\dist\jar
+      [jar] Building jar: C:\Users\Matt\Desktop\challenge\challenge\build\dist\jar\challenge-1.0.0.jar
+
+run-default:
+     [java] Enter a grid in the form 'cols rows room1 room2 ... roomN' :
+     [java] Finding paths for input '7 8 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 1 1' ...
+     [java] 
+     [java] Path statistics for graph: 
+     [java] Start vertex: [Start (x=0, y=0)]
+     [java]  Goal vertex: [Goal (x=7, y=0)]
+     [java] Graph: com.quora.challenge.graph.AdjacencyList 54 vertices
+     [java] ===========[Owned (x=7, y=4)] => [[Owned (x=6, y=4)], [Owned (x=7, y=3)]]
+     [java] ===========[Start (x=0, y=0)] => [[Owned (x=1, y=0)], [Owned (x=0, y=1)]]
+     [java] ===========[Owned (x=5, y=5)] => [[Owned (x=4, y=5)], [Owned (x=6, y=5)], [Owned (x=5, y=4)], [Owned (x=5, y=6)]]
+     [java] ===========[Owned (x=6, y=4)] => [[Owned (x=7, y=4)], [Owned (x=6, y=5)], [Owned (x=6, y=3)], [Owned (x=5, y=4)]]
+     [java] ===========[Owned (x=3, y=4)] => [[Owned (x=4, y=4)], [Owned (x=3, y=5)], [Owned (x=2, y=4)], [Owned (x=3, y=3)]]
+     [java] ===========[Owned (x=6, y=0)] => [[Owned (x=5, y=0)], [Goal (x=7, y=0)], [Owned (x=6, y=1)]]
+     [java] ===========[Owned (x=3, y=1)] => [[Owned (x=3, y=2)], [Owned (x=4, y=1)], [Owned (x=2, y=1)], [Owned (x=3, y=0)]]
+     [java] ===========[Owned (x=2, y=4)] => [[Owned (x=1, y=4)], [Owned (x=2, y=3)], [Owned (x=3, y=4)], [Owned (x=2, y=5)]]
+     [java] ===========[Owned (x=5, y=1)] => [[Owned (x=4, y=1)], [Owned (x=5, y=0)], [Owned (x=6, y=1)], [Owned (x=5, y=2)]]
+     [java] ===========[Owned (x=4, y=1)] => [[Owned (x=5, y=1)], [Owned (x=4, y=2)], [Owned (x=4, y=0)], [Owned (x=3, y=1)]]
+     [java] ===========[Owned (x=4, y=4)] => [[Owned (x=4, y=3)], [Owned (x=4, y=5)], [Owned (x=5, y=4)], [Owned (x=3, y=4)]]
+     [java] ===========[Owned (x=1, y=3)] => [[Owned (x=1, y=4)], [Owned (x=2, y=3)], [Owned (x=1, y=2)], [Owned (x=0, y=3)]]
+     [java] ===========[Owned (x=2, y=0)] => [[Owned (x=1, y=0)], [Owned (x=2, y=1)], [Owned (x=3, y=0)]]
+     [java] ===========[Owned (x=0, y=3)] => [[Owned (x=0, y=4)], [Owned (x=1, y=3)], [Owned (x=0, y=2)]]
+     [java] ===========[Owned (x=0, y=6)] => [[Owned (x=0, y=5)], [Owned (x=1, y=6)]]
+     [java] ===========[Owned (x=6, y=5)] => [[Owned (x=6, y=4)], [Owned (x=5, y=5)], [Owned (x=6, y=6)]]
+     [java] ===========[Owned (x=1, y=6)] => [[Owned (x=1, y=5)], [Owned (x=0, y=6)], [Owned (x=2, y=6)]]
+     [java] ===========[Owned (x=3, y=5)] => [[Owned (x=4, y=5)], [Owned (x=3, y=6)], [Owned (x=3, y=4)], [Owned (x=2, y=5)]]
+     [java] ===========[Owned (x=3, y=0)] => [[Owned (x=4, y=0)], [Owned (x=2, y=0)], [Owned (x=3, y=1)]]
+     [java] ===========[Owned (x=6, y=1)] => [[Owned (x=5, y=1)], [Owned (x=6, y=0)], [Owned (x=6, y=2)], [Owned (x=7, y=1)]]
+     [java] ===========[Owned (x=2, y=5)] => [[Owned (x=1, y=5)], [Owned (x=3, y=5)], [Owned (x=2, y=6)], [Owned (x=2, y=4)]]
+     [java] ===========[Owned (x=5, y=0)] => [[Owned (x=5, y=1)], [Owned (x=4, y=0)], [Owned (x=6, y=0)]]
+     [java] ===========[Owned (x=1, y=2)] => [[Owned (x=2, y=2)], [Owned (x=1, y=3)], [Owned (x=1, y=1)], [Owned (x=0, y=2)]]
+     [java] ===========[Owned (x=4, y=5)] => [[Owned (x=4, y=6)], [Owned (x=5, y=5)], [Owned (x=4, y=4)], [Owned (x=3, y=5)]]
+     [java] ===========[Goal (x=7, y=0)] => [[Owned (x=6, y=0)], [Owned (x=7, y=1)]]
+     [java] ===========[Owned (x=4, y=0)] => [[Owned (x=4, y=1)], [Owned (x=5, y=0)], [Owned (x=3, y=0)]]
+     [java] ===========[Owned (x=5, y=4)] => [[Owned (x=5, y=5)], [Owned (x=6, y=4)], [Owned (x=4, y=4)], [Owned (x=5, y=3)]]
+     [java] ===========[Owned (x=2, y=1)] => [[Owned (x=2, y=2)], [Owned (x=1, y=1)], [Owned (x=2, y=0)], [Owned (x=3, y=1)]]
+     [java] ===========[Owned (x=0, y=2)] => [[Owned (x=1, y=2)], [Owned (x=0, y=3)], [Owned (x=0, y=1)]]
+     [java] ===========[Owned (x=7, y=1)] => [[Owned (x=7, y=2)], [Goal (x=7, y=0)], [Owned (x=6, y=1)]]
+     [java] ===========[Owned (x=7, y=2)] => [[Owned (x=7, y=3)], [Owned (x=6, y=2)], [Owned (x=7, y=1)]]
+     [java] ===========[Owned (x=2, y=2)] => [[Owned (x=2, y=3)], [Owned (x=3, y=2)], [Owned (x=1, y=2)], [Owned (x=2, y=1)]]
+     [java] ===========[Owned (x=0, y=5)] => [[Owned (x=0, y=4)], [Owned (x=1, y=5)], [Owned (x=0, y=6)]]
+     [java] ===========[Owned (x=3, y=6)] => [[Owned (x=4, y=6)], [Owned (x=3, y=5)], [Owned (x=2, y=6)]]
+     [java] ===========[Owned (x=6, y=2)] => [[Owned (x=7, y=2)], [Owned (x=6, y=3)], [Owned (x=6, y=1)], [Owned (x=5, y=2)]]
+     [java] ===========[Owned (x=2, y=6)] => [[Owned (x=3, y=6)], [Owned (x=1, y=6)], [Owned (x=2, y=5)]]
+     [java] ===========[Owned (x=4, y=3)] => [[Owned (x=4, y=2)], [Owned (x=4, y=4)], [Owned (x=5, y=3)], [Owned (x=3, y=3)]]
+     [java] ===========[Owned (x=3, y=2)] => [[Owned (x=4, y=2)], [Owned (x=2, y=2)], [Owned (x=3, y=1)], [Owned (x=3, y=3)]]
+     [java] ===========[Owned (x=4, y=6)] => [[Owned (x=4, y=5)], [Owned (x=3, y=6)], [Owned (x=5, y=6)]]
+     [java] ===========[Owned (x=1, y=5)] => [[Owned (x=1, y=4)], [Owned (x=0, y=5)], [Owned (x=1, y=6)], [Owned (x=2, y=5)]]
+     [java] ===========[Owned (x=1, y=1)] => [[Owned (x=1, y=0)], [Owned (x=1, y=2)], [Owned (x=2, y=1)], [Owned (x=0, y=1)]]
+     [java] ===========[Owned (x=0, y=1)] => [[Start (x=0, y=0)], [Owned (x=1, y=1)], [Owned (x=0, y=2)]]
+     [java] ===========[Owned (x=5, y=6)] => [[Owned (x=4, y=6)], [Owned (x=5, y=5)], [Owned (x=6, y=6)]]
+     [java] ===========[Owned (x=5, y=3)] => [[Owned (x=4, y=3)], [Owned (x=5, y=4)], [Owned (x=6, y=3)], [Owned (x=5, y=2)]]
+     [java] ===========[Owned (x=6, y=6)] => [[Owned (x=6, y=5)], [Owned (x=5, y=6)]]
+     [java] ===========[Owned (x=0, y=4)] => [[Owned (x=1, y=4)], [Owned (x=0, y=5)], [Owned (x=0, y=3)]]
+     [java] ===========[Owned (x=2, y=3)] => [[Owned (x=2, y=2)], [Owned (x=1, y=3)], [Owned (x=2, y=4)], [Owned (x=3, y=3)]]
+     [java] ===========[Owned (x=1, y=0)] => [[Start (x=0, y=0)], [Owned (x=1, y=1)], [Owned (x=2, y=0)]]
+     [java] ===========[Owned (x=7, y=3)] => [[Owned (x=7, y=2)], [Owned (x=7, y=4)], [Owned (x=6, y=3)]]
+     [java] ===========[Owned (x=6, y=3)] => [[Owned (x=6, y=4)], [Owned (x=7, y=3)], [Owned (x=6, y=2)], [Owned (x=5, y=3)]]
+     [java] ===========[Owned (x=3, y=3)] => [[Owned (x=4, y=3)], [Owned (x=2, y=3)], [Owned (x=3, y=2)], [Owned (x=3, y=4)]]
+     [java] ===========[Owned (x=1, y=4)] => [[Owned (x=0, y=4)], [Owned (x=1, y=5)], [Owned (x=1, y=3)], [Owned (x=2, y=4)]]
+     [java] ===========[Owned (x=4, y=2)] => [[Owned (x=4, y=3)], [Owned (x=3, y=2)], [Owned (x=4, y=1)], [Owned (x=5, y=2)]]
+     [java] ===========[Owned (x=5, y=2)] => [[Owned (x=5, y=1)], [Owned (x=4, y=2)], [Owned (x=6, y=2)], [Owned (x=5, y=3)]]
+     [java] 
+     [java] =========186 total edges
+     [java] 
+     [java] =============
+     [java] Search depth: 5541226
+     [java] Elapsed time: 105923 ms
+     [java]  Total paths: 301716
+     [java] =============
+
+BUILD SUCCESSFUL
+Total time: 1 minute 48 seconds

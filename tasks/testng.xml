@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="testng">
+    
+    <target name="testng-init" depends="init" unless="testng.init.already-run">
+        <echo message="Initializing testng for '${ant.project.name}'" level="verbose"/>
+        <dirname property="testng.task.dir" file="${ant.file.testng}"/>
+        <property name="testng.rdir" value="testng"/>
+        <property name="testng-integration.rdir" value="${testng.rdir}-integration"/>
+        <property name="testng.home.dir" location="${testng.task.dir}${file.separator}${testng.rdir}"/>
+        <property name="testng.jvmargs" value="-Dtestng.null"/>
+        <property name="testng.report.dir" location="${build.reports.dir}${file.separator}${testng.rdir}"/>
+        <property name="testng.exclude-groups" value="broken,integration.*"/>
+        <property name="testng.suite" value="default"/>
+        <property name="testng.suite.dir" location="${basedir}${file.separator}${test.suites.rdir}${file.separator}${testng.rdir}"/>
+        <property name="testng.suite.xml.file" location="${testng.suite.dir}${file.separator}${testng.suite}.xml"/>
+        <path id="testng.classpath">
+            <fileset dir="${testng.home.dir}${file.separator}${libraries.rdir}">
+                <patternset refid="pattern.jar-files"/>
+            </fileset>
+        </path>
+        <condition property="testng.available">
+            <available resource="testngtasks" classpathref="testng.classpath"/>
+        </condition>
+        <condition property="testng.suite.available">
+            <available file="${testng.suite.xml.file}"/>
+        </condition>
+        <condition property="build.version" value="${version}" else="${version}${version.separator}">
+            <istrue value="${release}"/>
+        </condition>
+        <patternset id="testng.report.output.pattern">
+    		<include name="*${file.separator}*.xml"/>
+    	    <exclude name="*${file.separator}testng-*.xml"/>
+        </patternset>
+        <taskdef resource="testngtasks" classpathref="testng.classpath" onerror="ignore"/>
+        <property name="testng.init.already-run" value="true"/>
+    </target>
+
+    <target name="testng-clean" depends="testng-init">
+        <delete dir="${testng.report.dir}"/>
+        <delete dir="${testng.report.integration.dir}"/>
+        <delete dir="${test.compile.dir}"/>
+    </target>
+
+    <target name="testng-fixtures-present" depends="testng-init">
+	    <available file="${basedir}${file.separator}${test.fixtures.rdir}" property="test.fixtures.exists"/> 
+    </target>
+
+    <target name="testng-compile-copy-fixtures" depends="compile,testng-init,testng-fixtures-present" if="test.fixtures.exists">
+        <mkdir dir="${test.compile.dir}${file.separator}fixtures"/>
+        <copy todir="${test.compile.dir}${file.separator}fixtures">
+            <fileset dir="${basedir}${file.separator}${test.fixtures.rdir}">
+                <patternset refid="pattern.non-java-files"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+    <target name="testng-compile" depends="compile,testng-compile-copy-fixtures">
+        <mkdir dir="${test.compile.dir}"/>
+        <copy todir="${test.compile.dir}">
+            <fileset dir="${basedir}${file.separator}${test.java.rdir}">
+                <patternset refid="pattern.non-java-files"/>
+            </fileset>
+        </copy>
+        <javac optimize="yes" debug="true" destdir="${test.compile.dir}" source="${jvm.source.version}"
+               target="${jvm.target.version}" includeAntRuntime="no">
+            <src path="${basedir}${file.separator}${test.java.rdir}"/>
+            <classpath>
+                <path refid="test.classpath"/>
+                <path refid="testng.classpath"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="testng-exec-no-suite" depends="testng-compile" unless="testng.suite.available">
+        <echo message="Executing tests in '${test.compile.dir}'" level="verbose"/>
+        <echo message="Excluding groups '${testng.exclude-groups}'" level="verbose"/>
+        <mkdir dir="${testng.report.dir}"/>
+        <testng excludedgroups="${testng.exclude-groups}"
+                outputDir="${testng.report.dir}"
+                verbose="3"
+                suitename="${ant.project.name}"
+                testname="All">
+            <jvmarg line="${testng.jvmargs}"/>
+            <classfileset dir="${test.compile.dir}"/><!-- Only run tests on the test classes, not the whole classpath. -->
+            <classpath>
+                <pathelement path="${test.compile.dir}"/>
+                <path refid="test.classpath"/>
+                <path refid="testng.classpath"/>
+            </classpath>
+    		<sysproperty key="ant.basedir" value="${basedir}"/>
+    		<sysproperty key="ant.toplevel.dir" value="${toplevel.dir}"/>
+        </testng>
+    </target>
+
+    <target name="testng-exec-suite" depends="testng-compile" if="testng.suite.available">
+        <echo message="Executing suite '${testng.suite.xml.file}'" level="verbose"/>
+        <mkdir dir="${testng.report.dir}"/>
+	    <testng outputDir="${testng.report.dir}"
+                verbose="3">
+            <jvmarg line="${testng.jvmargs}"/>
+            <classpath>
+                <pathelement path="${test.compile.dir}"/>
+                <path refid="test.classpath"/>
+                <path refid="testng.classpath"/>
+            </classpath>
+    		<xmlfileset file="${testng.suite.xml.file}"/><!-- Only use one suite file. -->
+    		<sysproperty key="ant.basedir" value="${basedir}"/>
+    		<sysproperty key="ant.toplevel.dir" value="${toplevel.dir}"/>
+    		<sysproperty key="derby.system.home" value="${derby.dir}"/>
+        </testng>
+    </target>
+    
+    <target name="testng-exec" depends="testng-exec-no-suite,testng-exec-suite"/>
+
+    <target name="testng-report" depends="testng-exec">
+		<junitreport todir="${testng.report.dir}">
+			<fileset dir="${testng.report.dir}">
+			    <patternset refid="testng.report.output.pattern"/>
+			</fileset>
+		</junitreport>
+	</target>
+    
+    <target name="testng" depends="testng-report"/>
+
+</project>
